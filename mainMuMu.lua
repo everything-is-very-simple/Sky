@@ -1,43 +1,40 @@
 gg.setVisible(false)
 gg.alert(
     'script tested on emulator and game versions \n\nMuMu Player v110.0.0.113(x64) \nSky: Children of the Light v0.17.5(192395)')
-local a = 1977;
-local b = 20;
-local c = 0x200000;
-local d = 0x20F41e8;
+local a = 0x1cdde18;
+local b;
+local c;
+local d;
 local e;
-local f;
+local f = {}
 local g;
 local h;
 local i;
 local j;
 local k;
-local l = {}
+local l = false;
 local m;
-local n;
+local n = {}
 local o;
 local p;
 local q;
-local r = false;
+local r;
 local s;
-local t = {}
+local t;
 local u;
 local v;
-local w;
-local x;
+local w = false;
+local x = false;
 local y;
 local z;
 local A;
 local B;
-local C = false;
-local D = false;
+local C;
+local D;
 local E;
 local F;
 local G;
-local H;
-local I;
-local J;
-e = {
+b = {
     lvlWing = 0x68,
     unEnerg = 0x20F4C,
     unOxygen = 0x20F70,
@@ -50,91 +47,45 @@ e = {
     sWings = 0xAA0BDA0
 }
 gg.clearResults()
-j = gg.getRangesList('libBootloader.so')
-gg.setValues({{address = j[1].start + 0x11104c4, flags = 16, value = 999999}})
-function u()
-    local K = {}
-    local L = {}
-    local M;
-    gg.setRanges(gg.REGION_OTHER)
-    M = gg.getRangesList('[anon:scudo:secondary]')
-    for N, O in pairs(M) do
-        K[N] = O.start;
-        L[N] = O['end']
-    end
-    return K, L
+d = gg.getRangesList('libBootloader.so')
+gg.setValues({{address = d[1].start + 0x11104c4, flags = 16, value = 999999}})
+gg.setVisible(false)
+gg.clearResults()
+function G(H, I)
+    local J = gg.getRangesList(H)
+    return J[I]['end']
 end
-function v(P, Q, R, S)
-    function J(T, U)
-        local M = {}
-        for N, O in ipairs(P) do M[N] = O + U end
-        return M
-    end
-    local M = {}
-    for N = 1, R do M[N] = J(P, Q + (N - 1) * S) end
-    local V = {}
-    for W = 1, #M do
-        for N, O in pairs(M[W]) do
-            V[#V + 1] = {}
-            V[#V] = O
-        end
-    end
-    return V
-end
-f, h = u()
-g = v(f, d, b, c)
-function w(X, Y)
-    local M = {}
-    for Z, O in pairs(X) do
-        local K = 0;
-        local _ = false;
-        for N = 1, 19 do
-            M[N] = {address = O + N - 1, flags = gg.TYPE_BYTE}
-        end
-        local a0 = gg.getValues(M)
-        for N = 1, #a0 do
-            if a0[N].value ~= 100 then
-                break
-            else
-                for W, O in pairs(a0) do
-                    i = O.address;
-                    K = K + O.value
-                end
-                if K ~= Y then
-                    gg.toast('waiting... ')
-                else
-                    gg.toast('done')
-                    return i - 0x12
-                end
-            end
-        end
+function E()
+    local K = G('/system/lib64/hw/gralloc.x86.so', 2)
+    local L = gg.getValues({{address = K - a, flags = 1}})
+    if L[1].value == 100 then
+        gg.toast('done')
+        return L[1].address
+    else
+        gg.toast('error')
+        os.exit()
     end
 end
-local i = w(g, a)
-function x(a1, a2, a3)
-    for N = 1, #a1 do if a1[N] < a3 and a2[N] > a3 then return a1[N] end end
-end
-local a4 = i;
-local a5 = x(f, h, i)
+c = E()
 gg.addListItems({
-    {address = i - e.lvlWing, flags = 4, name = 'level wing'}, {
-        address = i + e.unEnerg,
+    {address = c - b.lvlWing, flags = 4, name = 'level wing'}, {
+        address = c + b.unEnerg,
         flags = 16,
         name = 'energy',
         value = '14',
         freeze = true
     }, {
-        address = i + e.unOxygen,
+        address = c + b.unOxygen,
         flags = 16,
         name = 'oxygen',
         value = '1',
         freeze = true
-    }, {address = i + e.positX, flags = 16, name = 'pos X'},
-    {address = i + e.positY, flags = 16, name = 'pos Y'},
-    {address = i + e.positZ, flags = 16, name = 'pos Z'}
+    }, {address = c + b.positX, flags = 16, name = 'pos X'},
+    {address = c + b.positY, flags = 16, name = 'pos Y'},
+    {address = c + b.positZ, flags = 16, name = 'pos Z'}
 })
 gg.clearResults()
-k = {
+e = {
     {"[Home] CandleSpace", 'CandleSpace'}, {"[Isle] Dawn", 'Dawn'},
     {"[Isle] DawnCave", 'DawnCave'},
     {"[Trial] Dawn_TrialsWater", 'Dawn_TrialsWater'},
@@ -186,157 +137,158 @@ k = {
     {"⚠️Eden rebirth2⚠️", 'OrbitEnd'},
     {"⚠️Heaven⚠️", 'CandleSpaceEnd'}, {"⚠️Credit⚠️", 'Credits'}
 }
-function I()
+function C()
     gg.clearResults()
     local M = {}
-    local K = {}
+    local N = {}
     gg.searchNumber(1487508559, gg.TYPE_DWORD, false, nil, 0, -1)
     M = gg.getResults(gg.getResultCount())
-    for N, O in ipairs(M) do K[N] = {address = O.address + 4, flags = 4} end
-    K = gg.getValues(K)
-    for N, O in ipairs(K) do
-        if O.value == 11 then
-            o = O.address + 8;
+    for O, P in ipairs(M) do N[O] = {address = P.address + 4, flags = 4} end
+    N = gg.getValues(N)
+    for O, P in ipairs(N) do
+        if P.value == 11 then
+            i = P.address + 8;
             break
         end
     end
-    for W, O in ipairs(k) do table.insert(l, O[1]) end
+    for Q, P in ipairs(e) do table.insert(f, P[1]) end
 end
-function p(a6, a7, a8)
-    local M = gg.bytes(a8)
-    local a9 = {}
-    local K;
-    if #M < a7 then
-        K = a7 - #M;
-        for N = 1, K do table.insert(M, 0) end
+function j(R, S, T)
+    local M = gg.bytes(T)
+    local U = {}
+    local N;
+    if #M < S then
+        N = S - #M;
+        for O = 1, N do table.insert(M, 0) end
     end
-    for N = 1, a7 do
-        table.insert(a9,
-                     {address = a6 + N - 1, flags = gg.TYPE_BYTE, value = M[N]})
+    for O = 1, S do
+        table.insert(U,
+                     {address = R + O - 1, flags = gg.TYPE_BYTE, value = M[O]})
     end
-    gg.setValues(a9)
+    gg.setValues(U)
 end
-function q()
-    r = false;
-    local aa = H(i - e.lvlWing, 4)
-    m = gg.choice(l)
-    if m == nil then m = 1 end
-    n = k[m][2]
-    p(o, 24, n)
+function k()
+    l = false;
+    local V = B(c - b.lvlWing, 4)
+    g = gg.choice(f)
+    if g == nil then g = 1 end
+    h = e[g][2]
+    j(i, 24, h)
     gg.setVisible(false)
-    gg.setValues({{address = i - e.lvlWing, flags = 4, value = 0}})
+    gg.setValues({{address = c - b.lvlWing, flags = 4, value = 0}})
     gg.sleep(200)
-    gg.setValues({{address = i - e.lvlWing, flags = 4, value = aa}})
+    gg.setValues({{address = c - b.lvlWing, flags = 4, value = V}})
     gg.sleep(15000)
-    p(o, 24, 'CandleSpace')
+    j(i, 24, 'CandleSpace')
     gg.sleep(5000)
-    A()
+    u()
 end
-function y()
-    r = false;
-    local ab = i - e.candle;
-    local ac = {}
+function s()
+    l = false;
+    local W = c - b.candle;
+    local X = {}
     gg.setVisible(false)
-    for N = 1, 606 do
-        ac[N] = {
-            address = ab + (N - 1) * 0x1c0,
-            flags = 16,
-            value = 1,
-            freeze = true
-        }
+    for O = 1, 606 do
+        X[O] =
+            {
+                address = W + (O - 1) * 0x1c0,
+                flags = 16,
+                value = 1,
+                freeze = true
+            }
     end
-    if D == false then
-        gg.addListItems(ac)
-        D = true;
+    if x == false then
+        gg.addListItems(X)
+        x = true;
         gg.toast('burn the candles ON')
         return
     else
-        gg.removeListItems(ac)
-        D = false;
+        gg.removeListItems(X)
+        x = false;
         gg.toast('burn the candles OFF')
     end
-    gg.setValues(ac)
+    gg.setValues(X)
 end
-function H(a6, ad)
-    local ae = {}
-    local ab;
-    ae[1] = {address = a6, flags = ad}
-    ab = gg.getValues(ae)
-    return tonumber(ab[1].value)
-end
-function F()
-    local af = {}
-    local ag, ah, ai;
-    ag = H(i + e.positX, 16)
-    ah = H(i + e.positY, 16)
-    ai = H(i + e.positZ, 16)
-    return ag, ah, ai
-end
-function E()
-    r = false;
-    gg.setVisible(false)
-    local aj = {}
-    local ag, ah, ai = i + e.positX, i + e.positY, i + e.positZ;
-    local af, ak, al = F()
-    for N = 1, 606 do
-        aj[N] = {
-            {address = ag - e.flame + (N - 1) * 0x1c0, flags = 16, value = af},
-            {address = ah - e.flame + (N - 1) * 0x1c0, flags = 16, value = ak},
-            {address = ai - e.flame + (N - 1) * 0x1c0, flags = 16, value = al}
-        }
-        gg.setValues(aj[N])
-    end
+function B(R, Y)
+    local Z = {}
+    local W;
+    Z[1] = {address = R, flags = Y}
+    W = gg.getValues(Z)
+    return tonumber(W[1].value)
 end
 function z()
-    r = false;
-    local am = i - e.aFlowers;
-    local an = {}
+    local _ = {}
+    local a0, a1, a2;
+    a0 = B(c + b.positX, 16)
+    a1 = B(c + b.positY, 16)
+    a2 = B(c + b.positZ, 16)
+    return a0, a1, a2
+end
+function y()
+    l = false;
     gg.setVisible(false)
-    for N = 1, 384 do an[N] = {address = am + (N - 1) * 8, flags = 16} end
-    if C == false then
-        gg.addListItems(an)
-        C = true;
+    local a3 = {}
+    local a0, a1, a2 = c + b.positX, c + b.positY, c + b.positZ;
+    local _, a4, a5 = z()
+    for O = 1, 606 do
+        a3[O] = {
+            {address = a0 - b.flame + (O - 1) * 0x1c0, flags = 16, value = _},
+            {address = a1 - b.flame + (O - 1) * 0x1c0, flags = 16, value = a4},
+            {address = a2 - b.flame + (O - 1) * 0x1c0, flags = 16, value = a5}
+        }
+        gg.setValues(a3[O])
+    end
+end
+function t()
+    l = false;
+    local a6 = c - b.aFlowers;
+    local a7 = {}
+    gg.setVisible(false)
+    for O = 1, 384 do a7[O] = {address = a6 + (O - 1) * 8, flags = 16} end
+    if w == false then
+        gg.addListItems(a7)
+        w = true;
         gg.toast('burn the flowers ON')
         return
     else
-        gg.removeListItems(an)
-        C = false;
+        gg.removeListItems(a7)
+        w = false;
         gg.toast('burn the flowers OFF')
     end
 end
-function A()
-    r = false;
-    local ao = {}
+function u()
+    l = false;
+    local a8 = {}
     gg.setVisible(false)
-    for N = 1, 12 do
-        ao[N] = {address = i - e.sWings + 0x120 * (N - 1), flags = 4, value = 4}
+    for O = 1, 12 do
+        a8[O] = {address = c - b.sWings + 0x120 * (O - 1), flags = 4, value = 4}
     end
-    gg.setValues(ao)
+    gg.setValues(a8)
     gg.sleep(200)
-    for N = 1, 12 do
-        ao[N] = {address = i - e.sWings + 0x120 * (N - 1), flags = 4, value = 8}
+    for O = 1, 12 do
+        a8[O] = {address = c - b.sWings + 0x120 * (O - 1), flags = 4, value = 8}
     end
-    gg.setValues(ao)
+    gg.setValues(a8)
 end
-I()
+C()
 gg.showUiButton()
 gg.clearResults()
-function B()
-    if gg.isVisible(true) and r == false or gg.isClickedUiButton() then
-        local ap = gg.choice({
+function v()
+    if gg.isVisible(true) and l == false or gg.isClickedUiButton() then
+        local a9 = gg.choice({
             'burn candles and flowers', 'absorb wings', 'teleport', 'flame'
         })
-        r = true;
-        if ap == 1 then
-            z()
-            y()
+        l = true;
+        if a9 == 1 then
+            t()
+            s()
         end
-        if ap == 2 then A() end
-        if ap == 3 then q() end
-        if ap == 4 then E() end
+        if a9 == 2 then u() end
+        if a9 == 3 then k() end
+        if a9 == 4 then y() end
     end
 end
 while true do
-    B()
+    v()
     gg.sleep(200)
 end
