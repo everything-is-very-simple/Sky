@@ -1,7 +1,7 @@
 gg.setVisible(false)
 gg.alert(
     'script tested on emulator and game versions \n\nMuMu Player v110.0.0.113(x64) \nSky: Children of the Light v0.17.5(192395)')
-local a = 0x1cdde18;
+local a = 0x1cd8e18;
 local b;
 local c;
 local d;
@@ -51,12 +51,12 @@ d = gg.getRangesList('libBootloader.so')
 gg.setValues({{address = d[1].start + 0x11104c4, flags = 16, value = 999999}})
 gg.setVisible(false)
 gg.clearResults()
-function G(H, I)
+function F(H, I)
     local J = gg.getRangesList(H)
-    return J[I]['end']
+    return J[I].start
 end
 function E()
-    local K = G('/system/lib64/hw/gralloc.x86.so', 2)
+    local K = F('/system/lib64/hw/gralloc.x86.so', 2)
     local L = gg.getValues({{address = K - a, flags = 1}})
     if L[1].value == 100 then
         gg.toast('done')
