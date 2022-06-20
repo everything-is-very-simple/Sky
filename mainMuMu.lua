@@ -141,35 +141,38 @@ function C()
     gg.clearResults()
     local M = {}
     local N = {}
-    gg.searchNumber(1487508559, gg.TYPE_DWORD, false, nil, 0, -1)
+    local O = gg.getRangesList('/apex/com.android.art/lib64/libart.so:bss')[1]
+                  .start;
+    local P = gg.getRangesList('libandroid_runtime.so:bss')[1].start;
+    gg.searchNumber(1487508559, gg.TYPE_DWORD, false, nil, O, P)
     M = gg.getResults(gg.getResultCount())
-    for O, P in ipairs(M) do N[O] = {address = P.address + 4, flags = 4} end
+    for Q, R in ipairs(M) do N[Q] = {address = R.address + 4, flags = 4} end
     N = gg.getValues(N)
-    for O, P in ipairs(N) do
-        if P.value == 11 then
-            i = P.address + 8;
+    for Q, R in ipairs(N) do
+        if R.value == 11 then
+            i = R.address + 8;
             break
         end
     end
-    for Q, P in ipairs(e) do table.insert(f, P[1]) end
+    for S, R in ipairs(e) do table.insert(f, R[1]) end
 end
-function j(R, S, T)
-    local M = gg.bytes(T)
-    local U = {}
+function j(T, U, V)
+    local M = gg.bytes(V)
+    local W = {}
     local N;
-    if #M < S then
-        N = S - #M;
-        for O = 1, N do table.insert(M, 0) end
+    if #M < U then
+        N = U - #M;
+        for Q = 1, N do table.insert(M, 0) end
     end
-    for O = 1, S do
-        table.insert(U,
-                     {address = R + O - 1, flags = gg.TYPE_BYTE, value = M[O]})
+    for Q = 1, U do
+        table.insert(W,
+                     {address = T + Q - 1, flags = gg.TYPE_BYTE, value = M[Q]})
     end
-    gg.setValues(U)
+    gg.setValues(W)
 end
 function k()
     l = false;
-    local V = B(c - b.lvlWing, 4)
+    local X = B(c - b.lvlWing, 4)
     g = gg.choice(f)
     if g == nil then g = 1 end
     h = e[g][2]
@@ -177,7 +180,7 @@ function k()
     gg.setVisible(false)
     gg.setValues({{address = c - b.lvlWing, flags = 4, value = 0}})
     gg.sleep(200)
-    gg.setValues({{address = c - b.lvlWing, flags = 4, value = V}})
+    gg.setValues({{address = c - b.lvlWing, flags = 4, value = X}})
     gg.sleep(15000)
     j(i, 24, 'CandleSpace')
     gg.sleep(5000)
@@ -185,107 +188,107 @@ function k()
 end
 function s()
     l = false;
-    local W = c - b.candle;
-    local X = {}
+    local Y = c - b.candle;
+    local Z = {}
     gg.setVisible(false)
-    for O = 1, 606 do
-        X[O] =
+    for Q = 1, 606 do
+        Z[Q] =
             {
-                address = W + (O - 1) * 0x1c0,
+                address = Y + (Q - 1) * 0x1c0,
                 flags = 16,
                 value = 1,
                 freeze = true
             }
     end
     if x == false then
-        gg.addListItems(X)
+        gg.addListItems(Z)
         x = true;
         gg.toast('burn the candles ON')
         return
     else
-        gg.removeListItems(X)
+        gg.removeListItems(Z)
         x = false;
         gg.toast('burn the candles OFF')
     end
-    gg.setValues(X)
+    gg.setValues(Z)
 end
-function B(R, Y)
-    local Z = {}
-    local W;
-    Z[1] = {address = R, flags = Y}
-    W = gg.getValues(Z)
-    return tonumber(W[1].value)
+function B(T, _)
+    local a0 = {}
+    local Y;
+    a0[1] = {address = T, flags = _}
+    Y = gg.getValues(a0)
+    return tonumber(Y[1].value)
 end
 function z()
-    local _ = {}
-    local a0, a1, a2;
-    a0 = B(c + b.positX, 16)
-    a1 = B(c + b.positY, 16)
-    a2 = B(c + b.positZ, 16)
-    return a0, a1, a2
+    local a1 = {}
+    local a2, a3, a4;
+    a2 = B(c + b.positX, 16)
+    a3 = B(c + b.positY, 16)
+    a4 = B(c + b.positZ, 16)
+    return a2, a3, a4
 end
 function y()
     l = false;
     gg.setVisible(false)
-    local a3 = {}
-    local a0, a1, a2 = c + b.positX, c + b.positY, c + b.positZ;
-    local _, a4, a5 = z()
-    for O = 1, 606 do
-        a3[O] = {
-            {address = a0 - b.flame + (O - 1) * 0x1c0, flags = 16, value = _},
-            {address = a1 - b.flame + (O - 1) * 0x1c0, flags = 16, value = a4},
-            {address = a2 - b.flame + (O - 1) * 0x1c0, flags = 16, value = a5}
+    local a5 = {}
+    local a2, a3, a4 = c + b.positX, c + b.positY, c + b.positZ;
+    local a1, a6, a7 = z()
+    for Q = 1, 606 do
+        a5[Q] = {
+            {address = a2 - b.flame + (Q - 1) * 0x1c0, flags = 16, value = a1},
+            {address = a3 - b.flame + (Q - 1) * 0x1c0, flags = 16, value = a6},
+            {address = a4 - b.flame + (Q - 1) * 0x1c0, flags = 16, value = a7}
         }
-        gg.setValues(a3[O])
+        gg.setValues(a5[Q])
     end
 end
 function t()
     l = false;
-    local a6 = c - b.aFlowers;
-    local a7 = {}
+    local a8 = c - b.aFlowers;
+    local a9 = {}
     gg.setVisible(false)
-    for O = 1, 384 do a7[O] = {address = a6 + (O - 1) * 8, flags = 16} end
+    for Q = 1, 384 do a9[Q] = {address = a8 + (Q - 1) * 8, flags = 16} end
     if w == false then
-        gg.addListItems(a7)
+        gg.addListItems(a9)
         w = true;
         gg.toast('burn the flowers ON')
         return
     else
-        gg.removeListItems(a7)
+        gg.removeListItems(a9)
         w = false;
         gg.toast('burn the flowers OFF')
     end
 end
 function u()
     l = false;
-    local a8 = {}
+    local aa = {}
     gg.setVisible(false)
-    for O = 1, 12 do
-        a8[O] = {address = c - b.sWings + 0x120 * (O - 1), flags = 4, value = 4}
+    for Q = 1, 12 do
+        aa[Q] = {address = c - b.sWings + 0x120 * (Q - 1), flags = 4, value = 4}
     end
-    gg.setValues(a8)
+    gg.setValues(aa)
     gg.sleep(200)
-    for O = 1, 12 do
-        a8[O] = {address = c - b.sWings + 0x120 * (O - 1), flags = 4, value = 8}
+    for Q = 1, 12 do
+        aa[Q] = {address = c - b.sWings + 0x120 * (Q - 1), flags = 4, value = 8}
     end
-    gg.setValues(a8)
+    gg.setValues(aa)
 end
 C()
 gg.showUiButton()
 gg.clearResults()
 function v()
     if gg.isVisible(true) and l == false or gg.isClickedUiButton() then
-        local a9 = gg.choice({
+        local ab = gg.choice({
             'burn candles and flowers', 'absorb wings', 'teleport', 'flame'
         })
         l = true;
-        if a9 == 1 then
+        if ab == 1 then
             t()
             s()
         end
-        if a9 == 2 then u() end
-        if a9 == 3 then k() end
-        if a9 == 4 then y() end
+        if ab == 2 then u() end
+        if ab == 3 then k() end
+        if ab == 4 then y() end
     end
 end
 while true do
