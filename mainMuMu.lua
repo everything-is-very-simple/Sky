@@ -247,7 +247,10 @@ function t()
     local a8 = c - b.aFlowers;
     local a9 = {}
     gg.setVisible(false)
-    for Q = 1, 384 do a9[Q] = {address = a8 + (Q - 1) * 8, flags = 16} end
+    for Q = 1, 384 do
+        a9[Q] =
+            {address = a8 + (Q - 1) * 8, flags = 16, value = 0, freeze = true}
+    end
     if w == false then
         gg.addListItems(a9)
         w = true;
